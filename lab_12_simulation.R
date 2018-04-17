@@ -47,10 +47,19 @@ run_simulation = function(n_trials, n, p, cutoff){
     p.values = model_select(data$covariates, data$responses, cutoff)
     all.p.values = c(all.p.values, p.values)
   }
-  
+  save(all.p.values, n, p, file="lab_12_simulation.Rdata")
 }
 
 make_plot = function(datapath){
   load(datapath)
-  hist(p.values, xlab="p-values", main=paste("n=", n, ", p=", p))
+  hist(all.p.values, xlab="p-values", main=paste("n=", n, ", p=", p))
+}
+
+par(mfrow=c(3,3), mar=c(1.8,1.5,1.8,1))
+cutoff = 0.05
+for (n in c(100, 1000, 10000)){
+  for (p in c(10, 20, 50)){
+    run_simulation(100, n, p, cutoff)
+    make_plot("lab_12_simulation.Rdata")
+  }
 }
